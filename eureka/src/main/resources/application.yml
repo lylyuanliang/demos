@@ -1,0 +1,23 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: spring-eureka-server
+eureka:
+  server:
+    # ??????
+    enable-self-preservation: false
+    # ??????????, ??60s
+    eviction-interval-timer-in-ms: 6
+    # ??????
+    use-read-only-response-cache: false
+    # readWriteCacheMap????, ??180s
+    response-cache-auto-expiration-in-seconds: 5
+  client:
+    # ????????????
+    register-with-eureka: false
+    # ??????????server
+    fetch-registry: false
+    serviceUrl:
+      defaultZone:
+        http://localhost:8081/eureka/

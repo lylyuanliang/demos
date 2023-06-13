@@ -1,0 +1,22 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone:
+        http://localhost:8081/eureka/
+
+server:
+  port: 80
+spring:
+  application:
+    name: spring-gateway
+  cloud:
+    gateway:
+      enabled: true
+      routes:
+        - id: service
+          uri: http://127.0.0.1:8084
+          predicates:
+            - Path=/consumer/**
+          filters:
+            # ???????/consumer
+            - StripPrefix=1
