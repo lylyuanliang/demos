@@ -21,3 +21,7 @@ eureka:
     serviceUrl:
       defaultZone:
         http://localhost:8081/eureka/
+
+logging:
+  level:
+    com.netflix: warn
