@@ -1,6 +1,7 @@
 package com.example.service.excel.demo;
 
 import com.alibaba.excel.EasyExcel;
+import com.example.service.excel.handler.CascadingWriterHandler;
 import com.example.service.excel.handler.DropDownWriteHandler;
 import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,10 +66,11 @@ public class ExcelController {
         dataList.add(build);
 
         // 写出数据
-        DropDownWriteHandler writeHandler = new DropDownWriteHandler()
-                .templateClass(Children.class)
+        Class<CascadingVo> clazz = CascadingVo.class;
+        CascadingWriterHandler writeHandler = new CascadingWriterHandler()
+                .templateClass(clazz)
                 .totalRowSize(dataList.size());
-        EasyExcel.write(response.getOutputStream(), Children.class)
+        EasyExcel.write(response.getOutputStream(), clazz)
                 .sheet("sheet1")
                 .registerWriteHandler(writeHandler)
                 .doWrite(dataList);
