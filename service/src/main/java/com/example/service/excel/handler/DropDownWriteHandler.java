@@ -71,12 +71,17 @@ public class DropDownWriteHandler implements SheetWriteHandler {
         dropDown(workSheet);
     }
 
-    private void dropDown(Sheet sheet){
+    /**
+     * 设置下拉框
+     *
+     * @param sheet 工作表
+     */
+    private void dropDown(Sheet sheet) {
 
         List<String> sortedHeaderList = getSortedHeader(this.templateClass);
         Map<String, String[]> dropdownData = getDropdownData(this.templateClass);
-        if(MapUtils.isEmpty(dropdownData)){
-            return ;
+        if (MapUtils.isEmpty(dropdownData)) {
+            return;
         }
         DataValidationHelper helper = sheet.getDataValidationHelper();
         dropdownData.forEach((fieldName, dataArray) -> {
@@ -90,6 +95,7 @@ public class DropDownWriteHandler implements SheetWriteHandler {
             CellRangeAddressList addressList = new CellRangeAddressList(1, totalRowSize, colNum, colNum);
             /***设置下拉框数据**/
             DataValidationConstraint constraint = helper.createExplicitListConstraint(dataArray);
+            setValidation(sheet, helper, constraint, addressList, "提示", "你输入的值未在备选列表中，请下拉选择合适的值");
             DataValidation dataValidation = helper.createValidation(constraint, addressList);
             /***处理Excel兼容性问题**/
             if (dataValidation instanceof XSSFDataValidation) {
@@ -100,20 +106,6 @@ public class DropDownWriteHandler implements SheetWriteHandler {
             }
             sheet.addValidationData(dataValidation);
         });
-    }
-
-    /**
-     * 设置隐藏列
-     * @param sheet
-     */
-    private void hidden(Sheet sheet){
-//        if (!CollectionUtils.isEmpty(hiddenIndices))
-//        {
-//            // 设置隐藏列
-//            for (Integer hiddenIndex : hiddenIndices) {
-//                sheet.setColumnHidden(hiddenIndex, true);
-//            }
-//        }
     }
 
     /**
@@ -159,28 +151,6 @@ public class DropDownWriteHandler implements SheetWriteHandler {
                             map.put(key, value);
                         },
                         HashMap::putAll);
-    }
-
-    private String[] getDropdownDataList(DropdownList anno, List<Field> allFields) {
-        String[] valueList = anno.valueList();
-        if (!ObjectUtils.isEmpty(valueList)) {
-            return valueList;
-        }
-
-        String referFiled = anno.cascadingReferFiled();
-        if (StringUtils.isBlank(referFiled)) {
-            return null;
-        }
-        Optional<Field> any = allFields.stream()
-                .filter(field -> StringUtils.equals(field.getName(), referFiled))
-                .findAny();
-        if (!any.isPresent()) {
-            throw new RuntimeException("字段[" + referFiled + "]不存在");
-        }
-
-
-        DropdownList.Cascading[] cascadings = anno.cascadingValueList();
-        return null;
     }
 
     /**

@@ -17,8 +17,8 @@ import java.util.List;
 public class ExcelController {
 
     @SneakyThrows
-    @GetMapping("/downloadCascade")
-    public void downloadCascade(HttpServletResponse response){
+    @GetMapping("/downloadDropdown")
+    public void downloadDropdown(HttpServletResponse response){
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
@@ -31,8 +31,35 @@ public class ExcelController {
                 .smallType("重庆市")
                 .largeType("重庆市")
                 .test("重庆市1111111")
-                .type("test1")
-                .typeSelect("aaa")
+                .build();
+
+        dataList.add(build);
+
+        // 写出数据
+        DropDownWriteHandler writeHandler = new DropDownWriteHandler()
+                .templateClass(Children.class)
+                .totalRowSize(dataList.size());
+        EasyExcel.write(response.getOutputStream(), Children.class)
+                .sheet("sheet1")
+                .registerWriteHandler(writeHandler)
+                .doWrite(dataList);
+    }
+
+    @SneakyThrows
+    @GetMapping("/downloadCascade")
+    public void downloadCascade(HttpServletResponse response){
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        String fileName = URLEncoder.encode("导出模板-级联下拉框", "UTF-8").replaceAll("\\+", "%20");
+        // 设置文件名称
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+
+        List<CascadingVo> dataList = new ArrayList<>();
+        CascadingVo build = CascadingVo.builder()
+                .smallType("重庆市")
+                .largeType("重庆市")
+                .test("重庆市1111111")
                 .build();
 
         dataList.add(build);
