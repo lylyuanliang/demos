@@ -27,17 +27,21 @@ public class ExcelController {
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
 
         List<DropdownVO> dataList = new ArrayList<>();
-        DropdownVO build = DropdownVO.builder()
+        DropdownVO build = Children.builder()
                 .smallType("重庆市")
                 .largeType("重庆市")
                 .test("重庆市1111111")
                 .build();
+
         dataList.add(build);
 
         // 写出数据
-        EasyExcel.write(response.getOutputStream(), DropdownVO.class)
+        DropDownWriteHandler writeHandler = new DropDownWriteHandler()
+                .templateClass(Children.class)
+                .totalRowSize(dataList.size());
+        EasyExcel.write(response.getOutputStream(), Children.class)
                 .sheet("sheet1")
-                .registerWriteHandler(new DropDownWriteHandler(DropdownVO.class, dataList.size()))
+                .registerWriteHandler(writeHandler)
                 .doWrite(dataList);
     }
 }

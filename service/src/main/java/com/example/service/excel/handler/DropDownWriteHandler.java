@@ -6,6 +6,7 @@ import com.alibaba.excel.write.handler.SheetWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import com.example.service.excel.annotation.DropdownList;
+import com.example.service.resolver.util.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -25,13 +26,30 @@ public class DropDownWriteHandler implements SheetWriteHandler {
     private Class<?> templateClass;
 
     /**
-     * 总行数
+     * 总行数, 默认设置999
      */
-    private Integer totalRowSize;
+    private Integer totalRowSize = 999;
 
-    public DropDownWriteHandler(Class<?> templateClass, Integer totalRowSize) {
+    /**
+     * 设置 实体模板类(easy excel 实体类)
+     *
+     * @param templateClass 实体模板类(easy excel 实体类)
+     * @return
+     */
+    public DropDownWriteHandler templateClass(Class<?> templateClass) {
         this.templateClass = templateClass;
+        return this;
+    }
+
+    /**
+     * 设置excel总行数
+     *
+     * @param totalRowSize 总行数
+     * @return
+     */
+    public DropDownWriteHandler totalRowSize(Integer totalRowSize) {
         this.totalRowSize = totalRowSize;
+        return this;
     }
 
     @Override
@@ -42,7 +60,6 @@ public class DropDownWriteHandler implements SheetWriteHandler {
     @Override
     public void afterSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
         //动态解决单个单元格下拉框超过255字符
-        log.info("第{}个Sheet写入成功。", writeSheetHolder.getSheetNo());
         Sheet workSheet = writeSheetHolder.getSheet();
         DataValidationHelper helper = workSheet.getDataValidationHelper();
         List<String> sortedHeaderList = getSortedHeader(this.templateClass);
@@ -56,7 +73,7 @@ public class DropDownWriteHandler implements SheetWriteHandler {
             //获取一个workbook
             Workbook workbook = writeWorkbookHolder.getWorkbook();
             //定义sheet的名称
-            String sheetName = fieldName + "-DropdownList";
+            String sheetName = fieldName + "_DropdownList";
             //1.创建一个隐藏的sheet
             Name name = workbook.getName(sheetName);
             if (ObjectUtils.isEmpty(name)) {
@@ -112,23 +129,16 @@ public class DropDownWriteHandler implements SheetWriteHandler {
     }
 
     /**
-     * 获取excel表头相关的字段
-     *
-     * @param clazz 实体模板类(easy excel 实体类)
-     * @return
+     * 校验必填参数
      */
-    private List<Field> getExcelField(Class<?> clazz) {
-        List<Field> annotatedFields = new ArrayList<>();
-
-        // 遍历实体类的字段，将标注了@ExcelProperty注解的字段统计出来
-        for (Field field : clazz.getDeclaredFields()) {
-            ExcelProperty annotation = field.getAnnotation(ExcelProperty.class);
-            if (annotation != null) {
-                annotatedFields.add(field);
-            }
+    private void validate() {
+        if (Objects.isNull(this.templateClass)) {
+            throw new RuntimeException("excel模板类型不能为空, 次handler需要借助实体类型, 具体可查找easyExcel编程样例");
         }
 
-        return annotatedFields;
+        if (Objects.isNull(this.totalRowSize)) {
+            log.warn("excel总行数未设置, 将采用默认值[999]");
+        }
     }
 
     /**
@@ -138,7 +148,7 @@ public class DropDownWriteHandler implements SheetWriteHandler {
      * @return
      */
     private Map<String, String[]> getDropdownData(Class<?> clazz) {
-        List<Field> annotatedFields = getExcelField(clazz);
+        List<Field> annotatedFields = ReflectionUtils.getAllFields(clazz, field -> field.isAnnotationPresent(ExcelProperty.class));
 
         return annotatedFields.stream()
                 .filter(field -> !field.isAnnotationPresent(ExcelIgnore.class))
@@ -170,7 +180,7 @@ public class DropDownWriteHandler implements SheetWriteHandler {
      * @return
      */
     private List<String> getSortedHeader(Class<?> clazz) {
-        List<Field> annotatedFields = getExcelField(clazz);
+        List<Field> annotatedFields = ReflectionUtils.getAllFields(clazz, field -> field.isAnnotationPresent(ExcelProperty.class));
 
         // 根据order属性进行排序
         // 注意: 实体模板类, 列顺序控制暂时只支持两种情况: 设置order和不设置order
