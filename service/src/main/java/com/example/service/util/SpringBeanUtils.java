@@ -1,4 +1,4 @@
-package com.example.service.resolver.util;
+package com.example.service.util;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;

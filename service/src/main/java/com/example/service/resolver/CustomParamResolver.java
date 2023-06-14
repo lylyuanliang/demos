@@ -3,7 +3,7 @@ package com.example.service.resolver;
 import com.alibaba.fastjson.JSONObject;
 import com.example.service.resolver.annotation.CustomRequestBody;
 import com.example.service.resolver.config.SubClassesRegistry;
-import com.example.service.resolver.util.SpringBeanUtils;
+import com.example.service.util.SpringBeanUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

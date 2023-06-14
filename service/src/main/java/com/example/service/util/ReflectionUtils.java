@@ -1,4 +1,4 @@
-package com.example.service.resolver.util;
+package com.example.service.util;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -31,6 +31,8 @@ public class ExcelController {
                 .smallType("重庆市")
                 .largeType("重庆市")
                 .test("重庆市1111111")
+                .type("test1")
+                .typeSelect("aaa")
                 .build();
 
         dataList.add(build);

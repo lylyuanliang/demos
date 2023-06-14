@@ -6,9 +6,14 @@ import com.alibaba.excel.write.handler.SheetWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import com.example.service.excel.annotation.DropdownList;
-import com.example.service.resolver.util.ReflectionUtils;
+import com.example.service.util.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
+import org.apache.poi.ss.usermodel.DataValidationHelper;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.springframework.util.ObjectUtils;
@@ -59,73 +64,56 @@ public class DropDownWriteHandler implements SheetWriteHandler {
 
     @Override
     public void afterSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
+        validate();
         //动态解决单个单元格下拉框超过255字符
         Sheet workSheet = writeSheetHolder.getSheet();
-        DataValidationHelper helper = workSheet.getDataValidationHelper();
+        // 设置下拉框
+        dropDown(workSheet);
+    }
+
+    private void dropDown(Sheet sheet){
+
         List<String> sortedHeaderList = getSortedHeader(this.templateClass);
         Map<String, String[]> dropdownData = getDropdownData(this.templateClass);
+        if(MapUtils.isEmpty(dropdownData)){
+            return ;
+        }
+        DataValidationHelper helper = sheet.getDataValidationHelper();
         dropdownData.forEach((fieldName, dataArray) -> {
-            if (ObjectUtils.isEmpty(dataArray)) {
+            if (dataArray == null || dataArray.length == 0) {
                 return;
             }
-
-            // 创建sheet，突破下拉框255的限制
-            //获取一个workbook
-            Workbook workbook = writeWorkbookHolder.getWorkbook();
-            //定义sheet的名称
-            String sheetName = fieldName + "_DropdownList";
-            //1.创建一个隐藏的sheet
-            Name name = workbook.getName(sheetName);
-            if (ObjectUtils.isEmpty(name)) {
-                Sheet sheet = workbook.createSheet(sheetName);
-                Name category1Name = workbook.createName();
-                category1Name.setNameName(sheetName);
-                int length1 = dataArray.length;
-                for (int i = 0, length = length1; i < length; i++) {
-                    // i:表示你开始的行数  0表示你开始的列数
-                    sheet.createRow(i).createCell(0).setCellValue(dataArray[i]);
-                }
-                if (!ObjectUtils.isEmpty(dataArray)) {
-                    //从被创建的sheet第一个单元格开始向下填充  填充到实际数据长度【value.length的行号】
-                    category1Name.setRefersToFormula(sheetName + "!$A$1:$A$" + (dataArray.length));
-                    // sheet设置隐藏
-                    workbook.setSheetHidden(workbook.getSheetIndex(sheetName), true);
-                }
-
-            } else {
-                Name category1Name = workbook.getName(sheetName);
-                Sheet sheet1 = workbook.getSheet(sheetName);
-                int length1 = dataArray.length;
-                for (int i = 0, length = length1; i < length; i++) {
-                    // i:表示你开始的行数  0表示你开始的列数
-                    sheet1.createRow(i).createCell(0).setCellValue(dataArray[i]);
-                }
-                if (!ObjectUtils.isEmpty(dataArray)) {
-                    category1Name.setRefersToFormula(sheetName + "!$A$1:$A$" + (dataArray.length));
-                }
-            }
-
             // 获取对应列的下标
             int colNum = sortedHeaderList.indexOf(fieldName);
 
-            //从第一行填充至row行（包含），第 colNum 列至 colNum 列【因为只填充一个单元格,所以起始一致】
+            /***起始行、终止行、起始列、终止列**/
             CellRangeAddressList addressList = new CellRangeAddressList(1, totalRowSize, colNum, colNum);
-            DataValidationConstraint constraint = helper.createFormulaListConstraint(sheetName);
-            setValidation(workSheet, helper, constraint, addressList, "提示", "你输入的值未在备选列表中，请下拉选择合适的值");
+            /***设置下拉框数据**/
+            DataValidationConstraint constraint = helper.createExplicitListConstraint(dataArray);
             DataValidation dataValidation = helper.createValidation(constraint, addressList);
-            workSheet.addValidationData(dataValidation);
-            //处理Excel兼容性问题
+            /***处理Excel兼容性问题**/
             if (dataValidation instanceof XSSFDataValidation) {
                 dataValidation.setSuppressDropDownArrow(true);
                 dataValidation.setShowErrorBox(true);
             } else {
                 dataValidation.setSuppressDropDownArrow(false);
             }
-            Sheet sheet0 = workSheet;
-            //5 将刚才设置的sheet引用到你的下拉列表中
-            sheet0.addValidationData(dataValidation);
+            sheet.addValidationData(dataValidation);
         });
+    }
 
+    /**
+     * 设置隐藏列
+     * @param sheet
+     */
+    private void hidden(Sheet sheet){
+//        if (!CollectionUtils.isEmpty(hiddenIndices))
+//        {
+//            // 设置隐藏列
+//            for (Integer hiddenIndex : hiddenIndices) {
+//                sheet.setColumnHidden(hiddenIndex, true);
+//            }
+//        }
     }
 
     /**
@@ -148,10 +136,11 @@ public class DropDownWriteHandler implements SheetWriteHandler {
      * @return
      */
     private Map<String, String[]> getDropdownData(Class<?> clazz) {
-        List<Field> annotatedFields = ReflectionUtils.getAllFields(clazz, field -> field.isAnnotationPresent(ExcelProperty.class));
+        // 获取所有字段
+        List<Field> allFields = ReflectionUtils.getAllFields(clazz);
 
-        return annotatedFields.stream()
-                .filter(field -> !field.isAnnotationPresent(ExcelIgnore.class))
+        return allFields.stream()
+                .filter(field -> !field.isAnnotationPresent(ExcelIgnore.class) && field.isAnnotationPresent(ExcelProperty.class))
                 // toMap方法value为null时会NullPointerException, 但我们需要null
                 .collect(HashMap::new,
                         (map, field) -> {
@@ -165,10 +154,33 @@ public class DropDownWriteHandler implements SheetWriteHandler {
                             String[] value = null;
                             if (anno != null) {
                                 value = anno.valueList();
+
                             }
                             map.put(key, value);
                         },
                         HashMap::putAll);
+    }
+
+    private String[] getDropdownDataList(DropdownList anno, List<Field> allFields) {
+        String[] valueList = anno.valueList();
+        if (!ObjectUtils.isEmpty(valueList)) {
+            return valueList;
+        }
+
+        String referFiled = anno.cascadingReferFiled();
+        if (StringUtils.isBlank(referFiled)) {
+            return null;
+        }
+        Optional<Field> any = allFields.stream()
+                .filter(field -> StringUtils.equals(field.getName(), referFiled))
+                .findAny();
+        if (!any.isPresent()) {
+            throw new RuntimeException("字段[" + referFiled + "]不存在");
+        }
+
+
+        DropdownList.Cascading[] cascadings = anno.cascadingValueList();
+        return null;
     }
 
     /**
