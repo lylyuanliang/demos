@@ -16,6 +16,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -219,16 +220,15 @@ public class CustomHandlerBase {
         //不能在现实页之前创建，否则无法隐藏。
         Sheet hideSheet = book.createSheet("site");
         book.setSheetHidden(book.getSheetIndex(hideSheet), true);
-
+        AtomicInteger rowId = new AtomicInteger();
         cascadingInfo.forEach(cascadingBean -> {
             String[] majorCategoryList = cascadingBean.getMajorCategoryList();
             Map<String, String[]> subCategoryMap = cascadingBean.getSubCategoryMap();
 
             // 以下代码copy from website, 懂的都懂
             // 将具体的数据写入到每一行中，行开头为父级区域，后面是子区域。
-            int rowId = 0;
-            Row proviRow = hideSheet.createRow(rowId++);
-            proviRow.createCell(0).setCellValue("大类列表");
+            Row proviRow = hideSheet.createRow(rowId.getAndIncrement());
+            proviRow.createCell(0).setCellValue("大类列表" + rowId);
             for (int i = 0; i < majorCategoryList.length; i++) {
                 Cell proviCell = proviRow.createCell(i + 1);
                 proviCell.setCellValue(majorCategoryList[i]);
@@ -239,7 +239,7 @@ public class CustomHandlerBase {
                 String key = keyIterator.next();
                 String[] son = subCategoryMap.get(key);
 
-                Row row = hideSheet.createRow(rowId++);
+                Row row = hideSheet.createRow(rowId.getAndIncrement());
                 row.createCell(0).setCellValue(key);
                 for (int i = 0; i < son.length; i++) {
                     Cell cell = row.createCell(i + 1);
@@ -247,7 +247,7 @@ public class CustomHandlerBase {
                 }
 
                 // 添加名称管理器
-                String range = getRange(1, rowId, son.length);
+                String range = getRange(1, rowId.get(), son.length);
                 Name name = book.createName();
                 name.setNameName(key);
                 String formula = "site!" + range;

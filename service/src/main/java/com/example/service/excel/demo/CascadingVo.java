@@ -17,6 +17,14 @@ public class CascadingVo {
     @DropdownList(valueList = {"重庆市1111111", "xxxxx", "dfdfdfdf"})
     private String test;
 
+    @ExcelProperty(value = "test2", order = 2)
+    @DropdownList(cascadingReferFiled = "test", cascadingValueList = {
+            @DropdownList.Cascading(key = "重庆市1111111", valueList = {"1111", "111111111"}),
+            @DropdownList.Cascading(key = "xxxxx", valueList = {"2222", "2222222"}),
+            @DropdownList.Cascading(key = "dfdfdfdf", valueList = {"333", "3333333333"})
+    })
+    private String test2;
+
     @ExcelProperty(value = "省", order = 12)
     @DropdownList(valueList = {"浙江省", "广东省", "重庆市"})
     private String largeType;
