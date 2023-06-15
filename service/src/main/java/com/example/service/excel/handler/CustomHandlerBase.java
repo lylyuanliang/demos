@@ -160,6 +160,10 @@ public class CustomHandlerBase {
      * @param sheet 工作表
      */
     public void createDropdown(Sheet sheet, Class<?> templateClass, Integer totalRowSize) {
+        if (totalRowSize == null || totalRowSize == 0) {
+            // 至少处理一行
+            totalRowSize =1;
+        }
 
         List<String> sortedHeaderList = getSortedHeader(templateClass);
         Map<String, String[]> dropdownData = getDropdownData(templateClass);
@@ -167,6 +171,7 @@ public class CustomHandlerBase {
             return;
         }
         DataValidationHelper helper = sheet.getDataValidationHelper();
+        Integer finalTotalRowSize = totalRowSize;
         dropdownData.forEach((headerName, dataArray) -> {
             if (dataArray == null || dataArray.length == 0) {
                 return;
@@ -175,7 +180,7 @@ public class CustomHandlerBase {
             int colNum = sortedHeaderList.indexOf(headerName);
 
             /***起始行、终止行、起始列、终止列**/
-            CellRangeAddressList addressList = new CellRangeAddressList(1, totalRowSize, colNum, colNum);
+            CellRangeAddressList addressList = new CellRangeAddressList(1, finalTotalRowSize, colNum, colNum);
             /***设置下拉框数据**/
             DataValidationConstraint constraint = helper.createExplicitListConstraint(dataArray);
             setValidation(sheet, helper, constraint, addressList, "提示", "你输入的值未在备选列表中，请下拉选择合适的值");
@@ -197,6 +202,10 @@ public class CustomHandlerBase {
      * @param sheet 工作表
      */
     public void createSubDropdown(Sheet sheet, Class<?> templateClass, Integer totalRowSize) {
+        if (totalRowSize == null || totalRowSize == 0) {
+            // 至少处理一行
+            totalRowSize =1;
+        }
 
         List<String> sortedHeaderList = getSortedHeader(templateClass);
         List<CascadingBean> cascadingInfo = getCascadingInfo(templateClass);
@@ -204,6 +213,7 @@ public class CustomHandlerBase {
             return;
         }
         DataValidationHelper helper = sheet.getDataValidationHelper();
+        Integer finalTotalRowSize = totalRowSize;
         cascadingInfo.forEach(bean -> {
             String headerName = bean.getHeaderName();
             String referHeaderName = bean.getReferHeaderName();
@@ -216,7 +226,7 @@ public class CustomHandlerBase {
             // "INDIRECT($A$" + 2 + ")" 表示规则数据会从名称管理器中获取key与单元格 A2 值相同的数据，如果A2是浙江省，那么此处就是浙江省下面的市
             // 为了让每个单元格的公式能动态适应，使用循环挨个给公式。
             // 循环几次，就有几个单元格生效，次数要和上面的大类影响行数一一对应，要不然最后几个没对上的单元格实现不了级联
-            for (Integer i = 1; i < totalRowSize + 1; i++) {
+            for (Integer i = 1; i < finalTotalRowSize + 1; i++) {
 
                 CellRangeAddressList rangeAddressList = new CellRangeAddressList(i, i, colNum, colNum);
                 int referRow = i + 1;
