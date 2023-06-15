@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class CustomHandlerBase {
+    private static final String ELSE_CASCADING_SUB_DEFAULT = "__else_cascading_sub_default__";
     /**
      * 从实体模板中获取下拉框的列表
      *
@@ -253,19 +254,19 @@ public class CustomHandlerBase {
             proviRow.createCell(0).setCellValue("大类列表" + rowId);
             for (int i = 0; i < majorCategoryList.length; i++) {
                 Cell proviCell = proviRow.createCell(i + 1);
-                proviCell.setCellValue(majorCategoryList[i]);
-            }
+                String key = majorCategoryList[i];
+                proviCell.setCellValue(key);
 
-            Iterator<String> keyIterator = subCategoryMap.keySet().iterator();
-            while (keyIterator.hasNext()) {
-                String key = keyIterator.next();
                 String[] son = subCategoryMap.get(key);
+                if (son == null) {
+                    son = subCategoryMap.get(ELSE_CASCADING_SUB_DEFAULT);
+                }
 
                 Row row = hideSheet.createRow(rowId.getAndIncrement());
                 row.createCell(0).setCellValue(key);
-                for (int i = 0; i < son.length; i++) {
-                    Cell cell = row.createCell(i + 1);
-                    cell.setCellValue(son[i]);
+                for (int j = 0; j < son.length; j++) {
+                    Cell cell = row.createCell(j + 1);
+                    cell.setCellValue(son[j]);
                 }
 
                 // 添加名称管理器

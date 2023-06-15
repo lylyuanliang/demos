@@ -47,7 +47,7 @@ public class CascadingVo {
     @DropdownList(cascadingReferFiled = "hiddenType", cascadingValueList = {
             @DropdownList.Cascading(key = "type1", valueList = {"type1-1", "type1-1-1", "type1-1-1-1"}),
             @DropdownList.Cascading(key = "type2", valueList = {"type2-2", "type2-2-2", "type2-2-2-2"}),
-            @DropdownList.Cascading(key = "type3", valueList = {"type3-3", "type3-3-3", "type3-3-3-3"})
+            @DropdownList.Cascading(key = "type3", valueList = {"type3-3", "type3-3-3", "type3-3-3-3"}),
     })
     private String hiddenTypeSub;
 
@@ -57,5 +57,19 @@ public class CascadingVo {
     @ExcelProperty(value = "其他,此列隐藏")
     @ColHidden
     private String otherHidden;
+
+    @ExcelProperty(value = "类型测试")
+    @DropdownList(valueList = {"type11", "type12", "type13", "type14"})
+    private String elseTestType;
+
+    /**
+     * 主要测试, type11为一种下拉框, type12,type13,type14为一种下拉框, 用__else_cascading_sub_default__来简化配置
+     */
+    @ExcelProperty(value = "类型测试-sub")
+    @DropdownList(cascadingReferFiled = "elseTestType", cascadingValueList = {
+           @DropdownList.Cascading(key = "type11", valueList = {"type1-13v", "type1-13-v1", "type1-1-13v-v1"}),
+            @DropdownList.Cascading(key = "__else_cascading_sub_default__", valueList = {"type1---------------", "type1-1---------1", "type1-1-341v----------"}),
+    })
+    private String elseTestTypeSub;
 
 }
