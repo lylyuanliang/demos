@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- * 级联下拉框
+ * 级联下拉框, 次handler功能已经包含DropdownWriteHandler的功能
  */
 @Slf4j
 public class CascadingWriterHandler extends CustomHandlerBase implements SheetWriteHandler {
