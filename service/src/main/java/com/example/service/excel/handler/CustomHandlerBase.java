@@ -197,8 +197,8 @@ public class CustomHandlerBase {
 
                 CellRangeAddressList rangeAddressList = new CellRangeAddressList(i, i, colNum, colNum);
                 int referRow = i + 1;
-                System.out.println("INDIRECT($" + letter + "$" + referRow + ")");
-                DataValidationConstraint formula = helper.createFormulaListConstraint("INDIRECT($" + letter + "$" + referRow + ")");
+                // 改用相对引用, 注意$表示绝对引用,例如INDIRECT($A$2), INDIRECT(A2)就表示相对引用
+                DataValidationConstraint formula = helper.createFormulaListConstraint("INDIRECT(" + letter + referRow + ")");
                 setValidation(sheet, helper, formula, rangeAddressList, "提示", "你输入的值未在备选列表中，请下拉选择合适的值");
             }
 
