@@ -12,7 +12,7 @@ import java.util.Objects;
  * 下拉框
  */
 @Slf4j
-public class DropDownWriteHandler extends CustomHandlerBase implements SheetWriteHandler {
+public class DropdownWriteHandler extends CustomHandlerBase implements SheetWriteHandler {
 
     /**
      * 实体模板类(easy excel 实体类)
@@ -30,7 +30,7 @@ public class DropDownWriteHandler extends CustomHandlerBase implements SheetWrit
      * @param templateClass 实体模板类(easy excel 实体类)
      * @return
      */
-    public DropDownWriteHandler templateClass(Class<?> templateClass) {
+    public DropdownWriteHandler templateClass(Class<?> templateClass) {
         this.templateClass = templateClass;
         return this;
     }
@@ -41,14 +41,9 @@ public class DropDownWriteHandler extends CustomHandlerBase implements SheetWrit
      * @param totalRowSize 总行数
      * @return
      */
-    public DropDownWriteHandler totalRowSize(Integer totalRowSize) {
+    public DropdownWriteHandler totalRowSize(Integer totalRowSize) {
         this.totalRowSize = totalRowSize;
         return this;
-    }
-
-    @Override
-    public void beforeSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
-
     }
 
     @Override

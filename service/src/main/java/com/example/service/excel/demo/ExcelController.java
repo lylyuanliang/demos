@@ -2,7 +2,7 @@ package com.example.service.excel.demo;
 
 import com.alibaba.excel.EasyExcel;
 import com.example.service.excel.handler.CascadingWriterHandler;
-import com.example.service.excel.handler.DropDownWriteHandler;
+import com.example.service.excel.handler.DropdownWriteHandler;
 import com.example.service.excel.handler.HiddenColWriterHandler;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
@@ -44,7 +44,7 @@ public class ExcelController {
         dataList.add(build);
 
         // 写出数据
-        DropDownWriteHandler writeHandler = new DropDownWriteHandler()
+        DropdownWriteHandler writeHandler = new DropdownWriteHandler()
                 .templateClass(Children.class)
                 .totalRowSize(dataList.size());
         EasyExcel.write(response.getOutputStream(), Children.class)
