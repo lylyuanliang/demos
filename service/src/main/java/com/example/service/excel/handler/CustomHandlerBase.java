@@ -2,11 +2,13 @@ package com.example.service.excel.handler;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.example.service.excel.annotation.ColHidden;
 import com.example.service.excel.annotation.DropdownList;
 import com.example.service.util.ReflectionUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -65,6 +67,9 @@ public class CustomHandlerBase {
         return allFields.stream()
                 .filter(field -> {
                             DropdownList annotation = field.getAnnotation(DropdownList.class);
+                            if (annotation == null) {
+                                return false;
+                            }
                             String referFiled = annotation.cascadingReferFiled();
                             // 这里认为指定了 cascadingReferFiled , 就表示此字段为级联的子列表
                             return StringUtils.isNotBlank(referFiled);
@@ -128,6 +133,23 @@ public class CustomHandlerBase {
                         Comparator.comparingInt(f -> f.getAnnotation(ExcelProperty.class).order())
                 )
                 .map(field -> field.getAnnotation(ExcelProperty.class).value()[0])
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 获取所有需要隐藏的列的下标集合
+     *
+     * @param clazz 实体模板类(easy excel 实体类)
+     * @return
+     */
+    public List<Integer> getHiddenColIndices(Class<?> clazz) {
+        List<Field> allFields = ReflectionUtils.getAllFields(clazz, field -> field.isAnnotationPresent(ExcelProperty.class));
+
+        List<String> sortedHeaders = getSortedHeader(clazz);
+
+        return allFields.stream()
+                .filter(field -> field.isAnnotationPresent(ColHidden.class))
+                .map(field -> sortedHeaders.indexOf(field.getAnnotation(ExcelProperty.class).value()[0]))
                 .collect(Collectors.toList());
     }
 
@@ -254,6 +276,21 @@ public class CustomHandlerBase {
                 name.setRefersToFormula(formula);
             }
         });
+    }
+
+    /**
+     * 设置隐藏列
+     *
+     * @param sheet         工作sheet
+     * @param hiddenIndices 需要隐藏的列索引集合
+     */
+    public void hidden(Sheet sheet, List<Integer> hiddenIndices) {
+        if (!CollectionUtils.isEmpty(hiddenIndices)) {
+            // 设置隐藏列
+            for (Integer hiddenIndex : hiddenIndices) {
+                sheet.setColumnHidden(hiddenIndex, true);
+            }
+        }
     }
 
     /**

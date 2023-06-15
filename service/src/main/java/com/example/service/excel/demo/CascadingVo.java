@@ -1,6 +1,7 @@
 package com.example.service.excel.demo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.example.service.excel.annotation.ColHidden;
 import com.example.service.excel.annotation.DropdownList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,5 +37,25 @@ public class CascadingVo {
             @DropdownList.Cascading(key = "重庆市", valueList = {"万州区", "云阳县"})
     })
     private String smallType;
+
+    @ExcelProperty(value = "隐藏测试类型大类,此列隐藏", order = 5)
+    @DropdownList(valueList = {"type1", "type2", "type3"})
+    @ColHidden
+    private String hiddenType;
+
+    @ExcelProperty(value = "隐藏测试类小类,此列不隐藏", order = 6)
+    @DropdownList(cascadingReferFiled = "hiddenType", cascadingValueList = {
+            @DropdownList.Cascading(key = "type1", valueList = {"type1-1", "type1-1-1", "type1-1-1-1"}),
+            @DropdownList.Cascading(key = "type2", valueList = {"type2-2", "type2-2-2", "type2-2-2-2"}),
+            @DropdownList.Cascading(key = "type3", valueList = {"type3-3", "type3-3-3", "type3-3-3-3"})
+    })
+    private String hiddenTypeSub;
+
+    @ExcelProperty(value = "其他")
+    private String other;
+
+    @ExcelProperty(value = "其他,此列隐藏")
+    @ColHidden
+    private String otherHidden;
 
 }

@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+/**
+ * 级联下拉框
+ */
 @Slf4j
 public class CascadingWriterHandler extends CustomHandlerBase implements SheetWriteHandler {
     /**
@@ -57,8 +60,6 @@ public class CascadingWriterHandler extends CustomHandlerBase implements SheetWr
         // 创建子类列表以及级联关系
         createSubDropdown(sheet, this.templateClass, this.totalRowSize);
     }
-
-
 
 
 }
