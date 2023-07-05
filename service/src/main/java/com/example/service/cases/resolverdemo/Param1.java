@@ -1,4 +1,4 @@
-package com.example.service.resolver.demo;
+package com.example.service.cases.resolverdemo;
 
 import com.example.service.resolver.annotation.SubClassAnnotation;
 

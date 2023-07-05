@@ -1,4 +1,4 @@
-package com.example.service.resolver.demo;
+package com.example.service.cases.resolverdemo;
 
 public class ParamBase {
     public static final String TYPE_NAME = "type";
