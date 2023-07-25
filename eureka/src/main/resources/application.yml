@@ -5,18 +5,18 @@ spring:
     name: spring-eureka-server
 eureka:
   server:
-    # ??????
+    # 关闭自我保护
     enable-self-preservation: false
-    # ??????????, ??60s
+    # 每次主动清理失效间隔，默认60s
     eviction-interval-timer-in-ms: 6
-    # ??????
+    # 关闭一级缓存
     use-read-only-response-cache: false
-    # readWriteCacheMap????, ??180s
+    # readWriteCacheMap失效时间，默认180s
     response-cache-auto-expiration-in-seconds: 5
   client:
-    # ????????????
+    # 注册进eureka(false)，因为我们是单机server，所以不注册自己
     register-with-eureka: false
-    # ??????????server
+    # 不从eureka上获取服务的注册信息
     fetch-registry: false
     serviceUrl:
       defaultZone:

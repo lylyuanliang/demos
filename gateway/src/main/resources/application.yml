@@ -1,5 +1,13 @@
 eureka:
+  #租约期限以及续约期限的配置
+  instance:
+    #租约到期，服务失效时间，默认值90秒，服务超过90秒没有发生心跳，Eurekaerver会将服务从列表移除#这里修改为6秒
+    lease-expiration-duration-in-seconds: 6
+    #租约续约间隔时间，默认30秒，这里修改为3秒钟
+    lease-renewal-interval-in-seconds: 3
   client:
+    # Eurekaclient每隔多久从Eurekaserver拉取一次服务列表，默认30秒，这里修改为3秒钟从注册中心拉取一次
+    registry-fetch-interval-seconds: 3
     serviceUrl:
       defaultZone:
         http://localhost:8081/eureka/
@@ -11,6 +19,9 @@ spring:
     name: spring-gateway
   cloud:
     gateway:
+      httpclient:
+        #增加配置1 全局的http客户端连接超时时间，单位ms
+        connect-timeout: 500
       enabled: true
       routes:
         - id: service
@@ -18,5 +29,18 @@ spring:
           predicates:
             - Path=/consumer/**
           filters:
-            # ???????/consumer
+            #  StripPrefix参数表示在将请求发送到下游之前从请求中剥离的路径个数。
+            # 这里表示剥离 /consumer
             - StripPrefix=1
+            # 增加配置2 设置路由重试
+            - name: Retry
+              args:
+                # 失败重试
+                retries: 3
+                # HTTP状态码系列，详情见枚举org.springframework.http.HttpStatus.Series
+                series:
+                  - SERVER_ERROR
+                #需要重试的请求方法，需要根据枚举org.springframework.http.HttpMethod来配置
+                methods:
+                  - GET
+                  - POST
