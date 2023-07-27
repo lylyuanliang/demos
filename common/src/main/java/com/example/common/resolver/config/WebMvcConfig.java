@@ -1,6 +1,6 @@
-package com.example.service.resolver.config;
+package com.example.common.resolver.config;
 
-import com.example.service.resolver.CustomParamResolver;
+import com.example.common.resolver.CustomParamResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;

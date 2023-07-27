@@ -1,20 +1,19 @@
-package com.example.service.excel.handler;
+package com.example.common.excel.handler;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.example.service.excel.annotation.ColHidden;
-import com.example.service.excel.annotation.DropdownList;
-import com.example.service.util.ReflectionUtils;
+import com.example.common.excel.annotation.ColHidden;
+import com.example.common.excel.annotation.DropdownList;
+import com.example.common.util.ReflectionUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -209,7 +208,7 @@ public class CustomHandlerBase {
 
         List<String> sortedHeaderList = getSortedHeader(templateClass);
         List<CascadingBean> cascadingInfo = getCascadingInfo(templateClass);
-        if (ObjectUtils.isEmpty(cascadingInfo)) {
+        if (cascadingInfo == null || cascadingInfo.size() == 0) {
             return;
         }
         DataValidationHelper helper = sheet.getDataValidationHelper();
@@ -246,7 +245,7 @@ public class CustomHandlerBase {
      */
     public void createSiteSheet(Workbook book, Class<?> templateClass) {
         List<CascadingBean> cascadingInfo = getCascadingInfo(templateClass);
-        if (ObjectUtils.isEmpty(cascadingInfo)) {
+        if (cascadingInfo == null || cascadingInfo.size() == 0) {
             return;
         }
         //创建一个专门用来存放地区信息的隐藏sheet页

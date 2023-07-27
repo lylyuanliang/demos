@@ -1,6 +1,4 @@
-package com.example.service.resolver.config;
-
-import org.springframework.stereotype.Component;
+package com.example.common.resolver.config;
 
 import java.util.Map;
 

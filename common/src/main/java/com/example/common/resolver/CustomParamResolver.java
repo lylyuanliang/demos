@@ -1,9 +1,9 @@
-package com.example.service.resolver;
+package com.example.common.resolver;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.service.resolver.annotation.CustomRequestBody;
-import com.example.service.resolver.config.SubClassesRegistry;
-import com.example.service.util.SpringBeanUtils;
+import com.example.common.resolver.config.SubClassesRegistry;
+import com.example.common.resolver.annotation.CustomRequestBody;
+import com.example.common.util.SpringBeanUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

@@ -1,7 +1,7 @@
 package com.example.service.cases.exceldemo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.example.service.excel.annotation.DropdownList;
+import com.example.common.excel.annotation.DropdownList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

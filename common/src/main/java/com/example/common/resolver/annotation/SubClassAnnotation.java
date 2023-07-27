@@ -1,4 +1,4 @@
-package com.example.service.resolver.annotation;
+package com.example.common.resolver.annotation;
 
 import java.lang.annotation.*;
 

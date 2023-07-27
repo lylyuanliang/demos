@@ -1,9 +1,7 @@
-package com.example.service.resolver.config;
+package com.example.common.resolver.config;
 
-import com.example.service.ServiceApplication;
-import com.example.service.resolver.annotation.SubClassAnnotation;
-import com.example.service.util.SpringBeanUtils;
-import org.apache.commons.lang.ClassUtils;
+import com.example.common.resolver.annotation.SubClassAnnotation;
+import com.example.common.util.SpringBeanUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -24,7 +22,9 @@ public class SubClassScanner implements ApplicationRunner {
         Map<String, Class<?>> annotatedClasses = new HashMap<>();
 
         // 获取@ComponentScan注解指定的扫描路径
-        String scanPackage = ClassUtils.getPackageName(ServiceApplication.class);
+//        String scanPackage = ClassUtils.getPackageName(ServiceApplication.class);
+        // todo 这里写死包路径了, 以后再看有没有更好的办法
+        String scanPackage = "com.example";
 
         // 创建一个ClassPathScanningCandidateComponentProvider实例，并设置扫描路径
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
