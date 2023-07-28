@@ -1,8 +1,19 @@
 server:
   port: 8085
 spring:
+  profiles:
+    # 在这里配置启用不同的注册中心, nacos为启用nacos为注册中心, 默认eureka
+    active: nacos
   application:
     name: discoven
+  cloud:
+    nacos:
+      discovery:
+        # 是否开启nacos注册中心, 默认false
+        enabled: ${nacos.discovery.enabled:false}
+        namespace: dev
+        group: liurl
+        server-addr: 127.0.0.1:8848
 
 eureka:
   #租约期限以及续约期限的配置
@@ -17,3 +28,5 @@ eureka:
     serviceUrl:
       defaultZone:
         http://localhost:8081/eureka/
+    # eureka开关, 默认true
+    enabled: ${eureka.enabled:true}

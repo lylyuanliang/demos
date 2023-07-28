@@ -6,7 +6,6 @@
         <groupId>org.example</groupId>
         <artifactId>eureka-downline</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
     <artifactId>service</artifactId>
@@ -27,6 +26,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!--nacos注册中心-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>${spring-alibaba-cloud.version}</version>
         </dependency>
     </dependencies>
 
