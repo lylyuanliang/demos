@@ -22,6 +22,8 @@
         <module>service</module>
         <module>discoven</module>
         <module>common</module>
+        <module>db-tkmybatis</module>
+        <module>db-mybatis-plus</module>
     </modules>
 
     <properties>

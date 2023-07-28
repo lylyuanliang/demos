@@ -1,11 +1,11 @@
 server:
-  port: 8071
+  port: 8073
 spring:
   profiles:
     # 在这里配置启用不同的注册中心, nacos为启用nacos为注册中心, 默认eureka
     active: nacos
   application:
-    name: service
+    name: db-tkmybatis
   cloud:
     nacos:
       discovery:

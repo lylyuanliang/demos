@@ -1,5 +1,5 @@
 server:
-  port: 8085
+  port: 8072
 spring:
   profiles:
     # 在这里配置启用不同的注册中心, nacos为启用nacos为注册中心, 默认eureka
