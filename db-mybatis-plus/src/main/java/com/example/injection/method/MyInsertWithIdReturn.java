@@ -1,8 +1,9 @@
-package com.example.injection;
+package com.example.injection.method;
 
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.example.injection.IdReturnGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
@@ -12,9 +13,15 @@ import org.apache.ibatis.mapping.SqlSource;
  */
 public class MyInsertWithIdReturn extends AbstractMethod {
 
+    /**
+     * 方法名, 这个方法名要和 com.example.injection.mapper.MyBaseMapper 中的方法名保持一致
+     */
     private static final String METHOD_NAME = "insertWithIdReturn";
 
-
+    public MyInsertWithIdReturn() {
+        // 调用父类有参构造函数(无参构造函数已过期)
+        super(METHOD_NAME);
+    }
 
     @Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
@@ -24,7 +31,7 @@ public class MyInsertWithIdReturn extends AbstractMethod {
         SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
         KeyGenerator generator = new IdReturnGenerator(tableInfo);
 
-        return this.addInsertMappedStatement(mapperClass, modelClass, METHOD_NAME, sqlSource,
+        return this.addInsertMappedStatement(mapperClass, modelClass, sqlSource,
                 generator, null, null);
     }
 }

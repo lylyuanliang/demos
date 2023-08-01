@@ -3,9 +3,9 @@ server:
 spring:
   profiles:
     # 在这里配置启用不同的注册中心, nacos为启用nacos为注册中心, 默认eureka
-    active: db-mybatis-plus
+    active: dm,@activedSpringProfile@
   application:
-    name: db-tkmybatis
+    name: db-mybatis-plus
   cloud:
     nacos:
       discovery:
