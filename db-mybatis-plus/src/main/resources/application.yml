@@ -3,7 +3,7 @@ server:
 spring:
   profiles:
     # 在这里配置启用不同的注册中心, nacos为启用nacos为注册中心, 默认eureka
-    active: dm,@activedSpringProfile@
+    active: nacos,@activedSpringProfile@
   application:
     name: db-mybatis-plus
   cloud:
@@ -30,3 +30,13 @@ eureka:
         http://localhost:8081/eureka/
     # eureka开关, 默认true
     enabled: ${eureka.enabled:true}
+
+mybatis-plus:
+  configuration:
+    #mybatis-plus配置控制台打印完整带参数SQL语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 对应的源码 com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig#columnFormat, 版本需要大于等于3.3.1
+  global-config:
+    db-config:
+      # mysql配置column-format: "`%s`", oracle和达梦配置column-format: "\"%s\"", 请根据自己数据库的关键字转义符进行配置
+      column-format: "`%s`"

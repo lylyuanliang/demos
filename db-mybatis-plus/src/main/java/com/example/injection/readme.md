@@ -26,6 +26,12 @@
 > com.example.injection.MyInjector
 > ```
 > 
+> 3.1 注入spring容器
+> 
+> ```
+> com.example.injection.config.MybatisPlusConfig
+> ```
+> 
 > 4. 把方法定义到BaseMapper
 > 
 > ```
@@ -35,3 +41,6 @@
 
 ## 坑点
 > - 在演示自定义批量和自动填充功能时，需要在mapper方法的参数上定义@Param(), 而mp默认仅支持 list, collection, array 3个命名，不然无法自动填充
+
+> - 实体类setter方法最好不要有返回值(比如lombok注解@Accessors(chain = true)), 否则会找不到set方法
+> 代码见: `java.beans.PropertyDescriptor.getWriteMethod`

@@ -1,6 +1,7 @@
 package com.example.injection.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,9 +13,9 @@ import lombok.experimental.Accessors;
  * @since 2018-08-12
  */
 @Data
-@Accessors(chain = true)
-@TableName("user")
-public class User {
+@TableName("custom_user")
+@Builder
+public class CustomUser {
     private Long id;
     private String name;
     private Integer age;
