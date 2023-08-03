@@ -6,10 +6,12 @@ import org.apache.ibatis.executor.ExecutorException;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 
-import java.beans.PropertyDescriptor;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+/**
+ * 回查id生成器, 这里只是做个步骤记录, 实际使用建议直接 使用 org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator
+ */
 public class IdReturnGenerator implements KeyGenerator {
     private TableInfo tableInfo;
 
@@ -44,12 +46,7 @@ public class IdReturnGenerator implements KeyGenerator {
         简略版的实现
          */
         try (ResultSet rs = statement.getGeneratedKeys()) {
-
-            PropertyDescriptor propertyDescriptor = new PropertyDescriptor(tableInfo.getKeyProperty(), o.getClass());
-            while (rs.next()) {
-                long id = rs.getLong("id");
-                propertyDescriptor.getWriteMethod().invoke(o, id);
-            }
+           // 这里实现取id以及设置id的功能, 见org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator
         } catch (Exception e) {
             throw new ExecutorException("Error getting generated key or setting result to parameter object. Cause: " + e, e);
         }

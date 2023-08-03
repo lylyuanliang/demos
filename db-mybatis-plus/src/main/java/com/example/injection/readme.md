@@ -9,6 +9,7 @@
 
 > 1. 定义主键生成器, 这里直接实现`org.apache.ibatis.executor.keygen.KeyGenerator`
 >   - 其原理是借助`processAfter`方法回查id
+>   - 这一步非必须, 建议直接使用 `org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator`
 >   
 > ```
 > com.example.injection.IdReturnGenerator
@@ -17,7 +18,8 @@
 > 2. 定义sql
 >
 > ```
-> com.example.injection.method.MyInsertWithIdReturn
+> com.example.injection.method.MyInsertWithIdReturn 
+> com.example.injection.method.InsertDmWithId
 > ```
 >
 > 3. 注册, 注册自定义方法

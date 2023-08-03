@@ -14,10 +14,13 @@ import lombok.Data;
  * @since 2018-08-12
  */
 @Data
-@TableName("custom_user")
+@TableName("custom_user_dm")
 @Builder
-public class CustomUser {
-    @TableId(value = "id",type = IdType.AUTO)
+public class CustomUserDm {
+    /**
+     * 不指定type的话, mp默认使用IdType.NONE
+     */
+    @TableId(value = "\"id\"", type=IdType.ASSIGN_ID)
     private Long id;
     private String name;
     private Integer age;
