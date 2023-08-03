@@ -3,7 +3,7 @@ server:
 spring:
   profiles:
     # 在这里配置启用不同的注册中心, nacos为启用nacos为注册中心, 默认eureka
-    active: nacos
+    active: nacos,@activedSpringProfile@
   application:
     name: db-tkmybatis
   cloud:
@@ -30,3 +30,8 @@ eureka:
         http://localhost:8081/eureka/
     # eureka开关, 默认true
     enabled: ${eureka.enabled:true}
+
+# mysql配置wrap-keyword: '`{0}`', oracle和达梦配置wrap-keyword: '"{0}"', 请根据自己数据库的关键字转义符进行配置
+# 对应实体类 tk.mybatis.mapper.entity.Config#wrapKeyword
+mapper:
+  wrap-keyword: '`{0}`'

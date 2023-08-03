@@ -18,6 +18,37 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>mysql</id>
+            <properties>
+                <activedSpringProfile>db-mysql</activedSpringProfile>
+            </properties>
+            <dependencies>
+                <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+                <dependency>
+                    <groupId>com.mysql</groupId>
+                    <artifactId>mysql-connector-j</artifactId>
+                    <version>8.0.33</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>dm</id>
+            <properties>
+                <activedSpringProfile>db-dm</activedSpringProfile>
+            </properties>
+            <dependencies>
+                <!-- https://mvnrepository.com/artifact/com.dameng/DmJdbcDriver18 -->
+                <dependency>
+                    <groupId>com.dameng</groupId>
+                    <artifactId>DmJdbcDriver18</artifactId>
+                    <version>8.1.2.192</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>com.example</groupId>
@@ -37,6 +68,13 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
             <version>${spring-alibaba-cloud.version}</version>
+        </dependency>
+
+        <!--tk mapper-->
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>4.2.0</version>
         </dependency>
     </dependencies>
 
