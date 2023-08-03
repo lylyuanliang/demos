@@ -35,7 +35,7 @@ public class InsertDmWithId extends AbstractMethod {
 
     @Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
-        // 直接复用insert的sql, 需要先设置IDENTITY_INSERT on才能插入带id的sql, 或者你可以修改sql, 去掉id字段
+        // 直接复用insert的sql, 需要先设置IDENTITY_INSERT on才能插入带id的sql
         String sql = IDENTITY_INSERT_ON + SqlMethod.INSERT_ONE.getSql().replace("<script>", "");
 
 
