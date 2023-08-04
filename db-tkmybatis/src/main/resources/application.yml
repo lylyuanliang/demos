@@ -1,0 +1,43 @@
+server:
+  port: 8073
+spring:
+  profiles:
+    # 在这里配置启用不同的注册中心, nacos为启用nacos为注册中心, 默认eureka
+    active: nacos,@activedSpringProfile@
+  application:
+    name: db-tkmybatis
+  cloud:
+    nacos:
+      discovery:
+        # 是否开启nacos注册中心, 默认false
+        enabled: ${nacos.discovery.enabled:false}
+        namespace: dev
+        group: liurl
+        server-addr: 127.0.0.1:8848
+
+eureka:
+  #租约期限以及续约期限的配置
+  instance:
+    #租约到期，服务失效时间，默认值90秒，服务超过90秒没有发生心跳，Eurekaerver会将服务从列表移除#这里修改为6秒
+    lease-expiration-duration-in-seconds: 6
+    #租约续约间隔时间，默认30秒，这里修改为3秒钟
+    lease-renewal-interval-in-seconds: 3
+  client:
+    # Eurekaclient每隔多久从Eurekaserver拉取一次服务列表，默认30秒，这里修改为3秒钟从注册中心拉取一次
+    registry-fetch-interval-seconds: 3
+    serviceUrl:
+      defaultZone:
+        http://localhost:8081/eureka/
+    # eureka开关, 默认true
+    enabled: ${eureka.enabled:true}
+
+# mysql配置wrap-keyword: '`{0}`', oracle和达梦配置wrap-keyword: '"{0}"', 请根据自己数据库的关键字转义符进行配置
+# 对应实体类 tk.mybatis.mapper.entity.Config#wrapKeyword
+mapper:
+  wrap-keyword: '`{0}`'
+
+#mybatis配置
+mybatis:
+  # 控制台打印sql日志
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

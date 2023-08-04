@@ -1,0 +1,10 @@
+
+eureka:
+  # 关掉eureka
+  enabled: false
+
+nacos:
+  discovery:
+    # 开启nacos
+    enabled: true
+

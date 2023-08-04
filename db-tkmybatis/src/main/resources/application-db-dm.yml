@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:dm://127.0.0.1:5236?schema=custom_db&useUnicode=true&characterEncoding=uft8&characterSetResults=utf8&useSSL=false&allowMultiQueries=true
+    username: SYSDBA
+    password: SYSDBA001
+    driver-class-name: dm.jdbc.driver.DmDriver
+
+# mysql配置wrap-keyword: '`{0}`', oracle和达梦配置wrap-keyword: '"{0}"', 请根据自己数据库的关键字转义符进行配置
+# 对应实体类 tk.mybatis.mapper.entity.Config#wrapKeyword
+mapper:
+  wrap-keyword: '"{0}"'

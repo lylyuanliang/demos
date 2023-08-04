@@ -1,6 +1,6 @@
 package com.example.service.cases.resolverdemo;
 
-import com.example.service.resolver.annotation.SubClassAnnotation;
+import com.example.common.resolver.annotation.SubClassAnnotation;
 
 @SubClassAnnotation(type = "type2")
 public class Param2 extends ParamBase{

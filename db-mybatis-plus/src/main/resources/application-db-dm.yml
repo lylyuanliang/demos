@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:dm://127.0.0.1:5236?schema=custom_db&useUnicode=true&characterEncoding=uft8&characterSetResults=utf8&useSSL=false&allowMultiQueries=true
+    username: SYSDBA
+    password: SYSDBA001
+    driver-class-name: dm.jdbc.driver.DmDriver
+
+mybatis-plus:
+  # 对应的源码 com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig#columnFormat, 版本需要大于等于3.3.1
+  global-config:
+    db-config:
+      # mysql配置column-format: "`%s`", oracle和达梦配置column-format: "\"%s\"", 请根据自己数据库的关键字转义符进行配置
+      column-format: "\"%s\""
