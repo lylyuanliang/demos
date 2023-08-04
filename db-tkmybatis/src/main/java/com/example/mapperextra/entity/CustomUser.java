@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -21,6 +22,7 @@ import javax.persistence.Table;
 public class CustomUser {
     @Id
     @KeySql(useGeneratedKeys = true)
+    @Column(insertable = false)
     private Long id;
     private String name;
     private Integer age;
