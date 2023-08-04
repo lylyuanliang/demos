@@ -20,7 +20,7 @@ public class CustomUserDm {
     /**
      * 不指定type的话, mp默认使用IdType.NONE
      */
-    @TableId(value = "\"id\"", type=IdType.ASSIGN_ID)
+    @TableId(type=IdType.ASSIGN_ID)
     private Long id;
     private String name;
     private Integer age;

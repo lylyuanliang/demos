@@ -35,3 +35,9 @@ eureka:
 # 对应实体类 tk.mybatis.mapper.entity.Config#wrapKeyword
 mapper:
   wrap-keyword: '`{0}`'
+
+#mybatis配置
+mybatis:
+  # 控制台打印sql日志
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

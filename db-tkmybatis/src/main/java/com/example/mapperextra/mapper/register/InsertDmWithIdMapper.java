@@ -1,7 +1,7 @@
-package com.example.mapperextra.mapper;
+package com.example.mapperextra.mapper.register;
 
 import com.example.mapperextra.provider.MyInsertProvider;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.InsertProvider;
 import tk.mybatis.mapper.annotation.RegisterMapper;
 
 /**
@@ -16,6 +16,6 @@ public interface InsertDmWithIdMapper<T> {
      * @param entity
      * @return
      */
-    @SelectProvider(type= MyInsertProvider.class, method = "dynamicSQL")
+    @InsertProvider(type= MyInsertProvider.class, method = "dynamicSQL")
     Integer insertDmWithId(T entity);
 }

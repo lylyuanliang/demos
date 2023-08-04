@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Builder
 public class CustomUserDm {
     @Id
-    @KeySql(sql = "SELECT IDENT_CURRENT(custom_user_dm)", order = ORDER.BEFORE)
+    @KeySql(sql = "SELECT IDENT_CURRENT('custom_user_dm')+IDENT_INCR('custom_user_dm')", order = ORDER.BEFORE)
     private Long id;
     private String name;
     private Integer age;

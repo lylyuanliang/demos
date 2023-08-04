@@ -26,4 +26,16 @@ public class TestUserMapper {
         userDmMapper.insertDmWithId(user);
         System.out.println(user);
     }
+
+    @Test
+    public void testInsert() {
+        System.out.println(("----- Insert method test ------"));
+        CustomUserDm user = CustomUserDm.builder()
+                .email("lylyuanliang@qq.com")
+                .age(1)
+                .name("lylyuanliang")
+                .build();
+        userDmMapper.insert(user);
+        System.out.println(user);
+    }
 }
