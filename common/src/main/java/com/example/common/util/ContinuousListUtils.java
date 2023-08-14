@@ -75,6 +75,18 @@ public class ContinuousListUtils {
     }
 
     /**
+     * 分割出连续数据作为一个新list
+     *
+     * @param sortedList  有序原始集合
+     * @param intervalFun 连续间隔
+     * @param <T>         目标值(原始值)
+     * @return
+     */
+    public static <T> List<List<T>> getContinuousLists(List<T> sortedList, BiPredicate<T, T> intervalFun) {
+        return getContinuousLists(sortedList, value -> value, null, intervalFun);
+    }
+
+    /**
      * 分割出连续数据作为一个新list, 并将原始对象转换成另一个对象
      *
      * @param sortedList 有序原始集合
