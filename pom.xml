@@ -24,6 +24,7 @@
         <module>common</module>
         <module>db-tkmybatis</module>
         <module>db-mybatis-plus</module>
+        <module>algorithm</module>
     </modules>
 
     <properties>
