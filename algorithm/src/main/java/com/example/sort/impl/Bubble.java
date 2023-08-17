@@ -2,8 +2,6 @@ package com.example.sort.impl;
 
 import com.example.sort.Sort;
 
-import java.util.Arrays;
-
 /**
  * 冒泡排序<br>
  * 1. 遍历待排序的数组，从第一个元素开始比较相邻的两个元素。<br>

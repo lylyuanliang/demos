@@ -15,6 +15,8 @@ public interface Sort {
         System.out.println(Arrays.toString(targetArray));
         System.out.println("排序后数组为:");
         System.out.println(Arrays.toString(this.sort(targetArray)));
+        System.out.println("排序过程");
+        System.out.println(PROCESS_BUILDER);
     }
 
     default void test() {
@@ -37,4 +39,5 @@ public interface Sort {
     }
 
     int[] DEFAULT_TEST_ARRAY= new int[] {12, 1000, 333, 11, 2, 3, 1, 0, 9, 8, 11, 44, 56};
+    StringBuilder PROCESS_BUILDER = new StringBuilder();
 }
