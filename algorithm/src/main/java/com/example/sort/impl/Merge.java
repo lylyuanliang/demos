@@ -32,6 +32,10 @@ import java.util.Arrays;
  *     [1 2 3 4 5 6 7 8]                 <br>
  */
 public class Merge implements Sort {
+    public static void main(String[] args) {
+        new Merge().test();
+    }
+
     @Override
     public int[] sort(int[] targetArray) {
         sort(targetArray, 0, targetArray.length - 1);
@@ -89,8 +93,11 @@ public class Merge implements Sort {
             }
         }
 
-        // 记录排序过程
-        PROCESS_BUILDER.append(Arrays.toString(array)).append("\n");
+        // 记录排序过程, 下面的代码跟排序无关
+        countTimes();
+        addLog4Process("数组下标范围:" + start + "~" + end);
+        addLog4Process("分割的子数组: " + Arrays.toString(leftTempArray) + "  " + Arrays.toString(rightTempArray));
+        addLog4Process("归并到原数组:" + Arrays.toString(array));
     }
 
     /**
@@ -109,9 +116,5 @@ public class Merge implements Sort {
         }
 
         return newArray;
-    }
-
-    public static void main(String[] args) {
-        new Merge().test();
     }
 }
