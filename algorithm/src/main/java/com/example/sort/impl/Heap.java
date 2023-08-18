@@ -2,6 +2,8 @@ package com.example.sort.impl;
 
 import com.example.sort.Sort;
 
+import java.util.Arrays;
+
 /**
  * 堆排序 <br><br>
  *
@@ -109,9 +111,10 @@ public class Heap implements Sort {
             exchange(arr, largestIndex, parentIndex);
 
             adjustHeap(arr, lastIndex, largestIndex);
-        }
+        }else {
 
-        // 以下一行代码只做排序过程日志记录
-//        addLog4Process(Arrays.toString(arr));
+            // 以下一行代码只做排序过程日志记录
+            addLog4Process(Arrays.toString(arr));
+        }
     }
 }
