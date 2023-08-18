@@ -50,7 +50,11 @@ public interface Sort {
     default void addLog4Process(String... logRow) {
         if (logRow != null) {
             for (String s : logRow) {
-                PROCESS_BUILDER.append("第").append(count.get()).append("轮")
+                int times = count.get();
+                if(times > 0) {
+                    PROCESS_BUILDER.append("第").append(times).append("轮");
+                }
+                PROCESS_BUILDER
                         .append(s).append("\n");
             }
         }
