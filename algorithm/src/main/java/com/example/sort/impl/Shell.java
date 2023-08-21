@@ -36,7 +36,7 @@ public class Shell implements Sort {
 
         // 使用希尔原始序列：n/2, n/4, n/8, ...
         for (int gap = n / 2; gap > 0; gap /= 2) {
-            // 以下代码记录日志, 与排序无关
+            // 以下一行代码记录日志, 与排序无关
             addLog4Process("gap:" + gap);
             for (int i = gap; i < n; i++) {
                 int temp = targetArray[i];
