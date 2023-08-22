@@ -56,7 +56,7 @@ public class Heap implements Sort {
 
         // 以下一行代码只做排序过程日志记录
         addLog4Process("构建初始大顶堆开始...");
-        // 构建最大堆
+        // 构建最大堆, 父节点，父节点的位置是(n-1)/2取整
         for (int i = (n-1) / 2 ; i >= 0; i--) {
             // 从第一个非叶子结点从下至上，从右至左调整结构
             adjustHeap(targetArray, n, i);
