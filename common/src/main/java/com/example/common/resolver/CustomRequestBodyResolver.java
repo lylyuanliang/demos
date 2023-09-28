@@ -20,8 +20,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * 主要用来解决 使用父子类 对象来接收不同请求报文的需求
+ */
 @Component
-public class CustomParamResolver implements HandlerMethodArgumentResolver {
+public class CustomRequestBodyResolver implements HandlerMethodArgumentResolver {
 
 
     @Override
