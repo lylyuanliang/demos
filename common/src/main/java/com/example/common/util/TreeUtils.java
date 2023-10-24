@@ -1,5 +1,6 @@
 package com.example.common.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -20,7 +21,8 @@ public class TreeUtils {
      *             parentNode.setChild(child);
      *         }
      * }
-     *</pre>
+     * </pre>
+     *
      * @param list        原始list
      * @param idFun       获取id的Function实例
      * @param parentIdFun 获取父级id的Function实例
@@ -50,5 +52,40 @@ public class TreeUtils {
         });
 
         return tree;
+    }
+
+    /**
+     * 展开某个父id下的所有节点(非树形结构)
+     *
+     * @param parentId    父id, 需要平铺的整个树的父id
+     * @param allDataList 所有数据(非树形结构)
+     * @param idFun       获取id的Function实例
+     * @param parentIdFun 获取父级id的Function实例
+     * @param <T>         节点类型
+     * @return 父节点以及其子节点组成的集合
+     */
+    public static <T> List<T> tileTree(Long parentId, List<T> allDataList, Function<T, Long> idFun, Function<T, Long> parentIdFun) {
+        // 根据父id分组, 方便获取某个parentId下的所有直接子节点
+        Map<Long, List<T>> pidMap = allDataList.stream()
+                .collect(Collectors.groupingBy(parentIdFun));
+
+        if (!pidMap.containsKey(parentId)) {
+            return null;
+        }
+
+        List<T> subList = pidMap.get(parentId);
+        List<T> resultList = new ArrayList<>();
+        while (!subList.isEmpty()) {
+            subList = subList.stream()
+                    .map(idFun)
+                    .filter(pidMap::containsKey)
+                    // 以当前节点id作为新的父id继续查找子节点
+                    .flatMap(pid -> pidMap.get(pid).stream())
+                    .collect(Collectors.toList());
+
+            resultList.addAll(subList);
+        }
+
+        return resultList;
     }
 }

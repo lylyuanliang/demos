@@ -14,7 +14,7 @@ public class TreeUtilsTest {
     public static void main(String[] args) {
         List<Node> testDataList = getTestData();
 
-        List<Node> subList = getSubList(1L, testDataList);
+        List<Node> subList = TreeUtils.tileTree(0L, testDataList, Node::getId, Node::getPid);
         System.out.println(JSONObject.toJSONString(subList));
 
         System.out.println(JSONObject.toJSONString(
