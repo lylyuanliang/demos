@@ -74,7 +74,7 @@ public class TreeUtils {
         }
 
         List<T> subList = pidMap.get(parentId);
-        List<T> resultList = new ArrayList<>();
+        List<T> resultList = new ArrayList<>(subList);
         while (!subList.isEmpty()) {
             subList = subList.stream()
                     .map(idFun)
