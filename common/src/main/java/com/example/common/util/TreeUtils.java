@@ -62,11 +62,12 @@ public class TreeUtils {
      * @param idFun       获取id的Function实例
      * @param parentIdFun 获取父级id的Function实例
      * @param <T>         节点类型
+     * @param <K>         id类型
      * @return 父节点以及其子节点组成的集合
      */
-    public static <T> List<T> tileTree(Long parentId, List<T> allDataList, Function<T, Long> idFun, Function<T, Long> parentIdFun) {
+    public static <T, K> List<T> tileTree(K parentId, List<T> allDataList, Function<T, K> idFun, Function<T, K> parentIdFun) {
         // 根据父id分组, 方便获取某个parentId下的所有直接子节点
-        Map<Long, List<T>> pidMap = allDataList.stream()
+        Map<K, List<T>> pidMap = allDataList.stream()
                 .collect(Collectors.groupingBy(parentIdFun));
 
         if (!pidMap.containsKey(parentId)) {
