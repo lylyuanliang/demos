@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -88,5 +89,39 @@ public class TreeUtils {
         }
 
         return resultList;
+    }
+
+    /**
+     * 递归展开嵌套结构的方法, 使用样例
+     * <pre>
+     * {@code
+     *      List<Node> pojoList = DataTreeUtils.flattenTree(menuEditList,
+     *                 Node::getChildren,
+     *                 node -> node.setChild(null));
+     * </pre>
+     *
+     * @param nodes       树形结构
+     * @param getChildren 获取子节点的Function实例
+     * @param clearChildren 清空子节点的Consumer实例
+     * @param <T>         节点类型
+     * @return 展开后的列表
+     */
+    public static <T> List<T> flattenTree(List<T> nodes, Function<T, List<T>> getChildren, Consumer<T> clearChildren) {
+        List<T> result = new ArrayList<>();
+        for (T node : nodes) {
+            // 递归处理子节点（先展开深层子节点）
+            List<T> children = getChildren.apply(node);
+            if (children != null && !children.isEmpty()) {
+                result.addAll(flattenTree(children, getChildren, clearChildren));
+            }
+
+            if (clearChildren != null) {
+                // 清空当前节点的 children 字段
+                clearChildren.accept(node);
+            }
+            // 将当前节点加入结果列表
+            result.add(node);
+        }
+        return result;
     }
 }

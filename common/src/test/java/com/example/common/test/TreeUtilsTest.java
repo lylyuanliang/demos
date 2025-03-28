@@ -13,21 +13,27 @@ import java.util.stream.Collectors;
 public class TreeUtilsTest {
     public static void main(String[] args) {
         List<Node> testDataList = getTestData();
+        System.out.println("原始结构:");
+        System.out.println(JSONObject.toJSONString(testDataList));
 
         List<Node> subList = TreeUtils.tileTree(0L, testDataList, Node::getId, Node::getPid);
+        System.out.println("平铺某个节点下的所有子节点:");
         System.out.println(JSONObject.toJSONString(subList));
 
-        System.out.println(JSONObject.toJSONString(
-                        TreeUtils.merge2Tree(getTestData(), Node::getId, Node::getPid, (parentNode, node) -> {
-                            List<Node> child = parentNode.getChild();
-                            if (child == null) {
-                                child = new ArrayList<>();
-                            }
-                            child.add(node);
-                            parentNode.setChild(child);
-                        })
-                )
-        );
+        System.out.println("树形结构:");
+        List<Node> tree = TreeUtils.merge2Tree(getTestData(), Node::getId, Node::getPid, (parentNode, node) -> {
+            List<Node> child = parentNode.getChild();
+            if (child == null) {
+                child = new ArrayList<>();
+            }
+            child.add(node);
+            parentNode.setChild(child);
+        });
+        System.out.println(JSONObject.toJSONString(tree));
+
+        System.out.println("树形结构重新平铺:");
+        List<Node> flattenList = TreeUtils.flattenTree(tree, Node::getChild, node -> node.setChild(null));
+        System.out.println(JSONObject.toJSONString(flattenList));
     }
 
     /**
